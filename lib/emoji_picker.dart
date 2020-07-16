@@ -330,22 +330,6 @@ class _EmojiPickerState extends State<EmojiPicker> {
     }
   }
 
-  Future<Map<String, String>> _getFiltered(Map<String, String> emoji) async {
-    if (Platform.isAndroid) {
-      Map<String, String> filtered;
-      try {
-        var temp =
-            await platform.invokeMethod("checkAvailability", {'emoji': emoji});
-        filtered = Map<String, String>.from(temp);
-      } on PlatformException catch (_) {
-        filtered = null;
-      }
-      return filtered;
-    } else {
-      return emoji;
-    }
-  }
-
   Future<List<String>> getRecentEmojis() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final key = "recents";
@@ -375,7 +359,7 @@ class _EmojiPickerState extends State<EmojiPicker> {
       return newMap;
     }
 
-    newMap = await _getFiltered(map);
+    newMap = map;
 
     await cacheFilteredEmojis(title, newMap);
 
